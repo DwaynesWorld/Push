@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -116,10 +116,9 @@
 		68BF92B2253A450A00DBB260 /* Push */ = {
 			isa = PBXGroup;
 			children = (
-				68BF92B3253A450A00DBB260 /* AppDelegate.swift */,
-				68BF92B5253A450A00DBB260 /* SceneDelegate.swift */,
-				68BF92B7253A450A00DBB260 /* ContentView.swift */,
-				68BF92B9253A450B00DBB260 /* Assets.xcassets */,
+				68BF930C253A481B00DBB260 /* Resources */,
+				68BF9308253A47CD00DBB260 /* Views */,
+				68BF9307253A47B900DBB260 /* Application */,
 				68BF92BE253A450B00DBB260 /* LaunchScreen.storyboard */,
 				68BF92C1253A450B00DBB260 /* Info.plist */,
 				68BF92BB253A450B00DBB260 /* Preview Content */,
@@ -153,6 +152,31 @@
 			path = PushUITests;
 			sourceTree = "<group>";
 		};
+		68BF9307253A47B900DBB260 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				68BF92B5253A450A00DBB260 /* SceneDelegate.swift */,
+				68BF92B3253A450A00DBB260 /* AppDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		68BF9308253A47CD00DBB260 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				68BF92B7253A450A00DBB260 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		68BF930C253A481B00DBB260 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				68BF92B9253A450B00DBB260 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		7E370F549C55C26D217E5D77 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,7 +187,6 @@
 				0EF961EE0846A5494A936998 /* Pods-PushTests.debug.xcconfig */,
 				A35FA226D19D6FF4AC1EE24F /* Pods-PushTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -616,7 +639,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kthompson.Push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -638,7 +661,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kthompson.Push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
