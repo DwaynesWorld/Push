@@ -119,9 +119,6 @@
 				68BF930C253A481B00DBB260 /* Resources */,
 				68BF9308253A47CD00DBB260 /* Views */,
 				68BF9307253A47B900DBB260 /* Application */,
-				68BF92BE253A450B00DBB260 /* LaunchScreen.storyboard */,
-				68BF92C1253A450B00DBB260 /* Info.plist */,
-				68BF92BB253A450B00DBB260 /* Preview Content */,
 			);
 			path = Push;
 			sourceTree = "<group>";
@@ -172,7 +169,10 @@
 		68BF930C253A481B00DBB260 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				68BF92BB253A450B00DBB260 /* Preview Content */,
 				68BF92B9253A450B00DBB260 /* Assets.xcassets */,
+				68BF92BE253A450B00DBB260 /* LaunchScreen.storyboard */,
+				68BF92C1253A450B00DBB260 /* Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -628,10 +628,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Push/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Push/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = 5B2H3TP95N;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Push/Info.plist;
+				INFOPLIST_FILE = Push/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -650,10 +650,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Push/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Push/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = 5B2H3TP95N;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Push/Info.plist;
+				INFOPLIST_FILE = Push/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
