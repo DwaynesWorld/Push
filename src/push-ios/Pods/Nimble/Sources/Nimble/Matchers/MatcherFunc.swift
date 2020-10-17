@@ -11,26 +11,30 @@
 /// @see allPass for an example that uses accepts other matchers as input.
 @available(*, deprecated, message: "Use to Predicate instead")
 public struct MatcherFunc<T>: Matcher {
-    public let matcher: (Expression<T>, FailureMessage) throws -> Bool
+  public let matcher: (Expression<T>, FailureMessage) throws -> Bool
 
-    public init(_ matcher: @escaping (Expression<T>, FailureMessage) throws -> Bool) {
-        self.matcher = matcher
-    }
+  public init(_ matcher: @escaping (Expression<T>, FailureMessage) throws -> Bool) {
+    self.matcher = matcher
+  }
 
-    public func matches(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws -> Bool {
-        return try matcher(actualExpression, failureMessage)
-    }
+  public func matches(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws
+    -> Bool
+  {
+    return try matcher(actualExpression, failureMessage)
+  }
 
-    public func doesNotMatch(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws -> Bool {
-        return try !matcher(actualExpression, failureMessage)
-    }
+  public func doesNotMatch(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws
+    -> Bool
+  {
+    return try !matcher(actualExpression, failureMessage)
+  }
 
-    /// Compatibility layer to new Matcher API. Converts an old-style matcher to a new one.
-    /// Note: You should definitely spend the time to convert to the new api as soon as possible
-    /// since this struct type is deprecated.
-    public var predicate: Predicate<T> {
-        return Predicate.fromDeprecatedMatcher(self)
-    }
+  /// Compatibility layer to new Matcher API. Converts an old-style matcher to a new one.
+  /// Note: You should definitely spend the time to convert to the new api as soon as possible
+  /// since this struct type is deprecated.
+  public var predicate: Predicate<T> {
+    return Predicate.fromDeprecatedMatcher(self)
+  }
 }
 
 /// DEPRECATED: A convenience API to build matchers that don't need special negation
@@ -46,40 +50,46 @@ public struct MatcherFunc<T>: Matcher {
 /// @see allPass for an example that uses accepts other matchers as input.
 @available(*, deprecated, message: "Use to Predicate instead")
 public struct NonNilMatcherFunc<T>: Matcher {
-    public let matcher: (Expression<T>, FailureMessage) throws -> Bool
+  public let matcher: (Expression<T>, FailureMessage) throws -> Bool
 
-    public init(_ matcher: @escaping (Expression<T>, FailureMessage) throws -> Bool) {
-        self.matcher = matcher
-    }
+  public init(_ matcher: @escaping (Expression<T>, FailureMessage) throws -> Bool) {
+    self.matcher = matcher
+  }
 
-    public func matches(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws -> Bool {
-        let pass = try matcher(actualExpression, failureMessage)
-        if try attachNilErrorIfNeeded(actualExpression, failureMessage: failureMessage) {
-            return false
-        }
-        return pass
+  public func matches(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws
+    -> Bool
+  {
+    let pass = try matcher(actualExpression, failureMessage)
+    if try attachNilErrorIfNeeded(actualExpression, failureMessage: failureMessage) {
+      return false
     }
+    return pass
+  }
 
-    public func doesNotMatch(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws -> Bool {
-        let pass = try !matcher(actualExpression, failureMessage)
-        if try attachNilErrorIfNeeded(actualExpression, failureMessage: failureMessage) {
-            return false
-        }
-        return pass
+  public func doesNotMatch(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws
+    -> Bool
+  {
+    let pass = try !matcher(actualExpression, failureMessage)
+    if try attachNilErrorIfNeeded(actualExpression, failureMessage: failureMessage) {
+      return false
     }
+    return pass
+  }
 
-    internal func attachNilErrorIfNeeded(_ actualExpression: Expression<T>, failureMessage: FailureMessage) throws -> Bool {
-        if try actualExpression.evaluate() == nil {
-            failureMessage.postfixActual = " (use beNil() to match nils)"
-            return true
-        }
-        return false
+  internal func attachNilErrorIfNeeded(
+    _ actualExpression: Expression<T>, failureMessage: FailureMessage
+  ) throws -> Bool {
+    if try actualExpression.evaluate() == nil {
+      failureMessage.postfixActual = " (use beNil() to match nils)"
+      return true
     }
+    return false
+  }
 
-    /// Compatibility layer to new Matcher API. Converts an old-style matcher to a new one.
-    /// Note: You should definitely spend the time to convert to the new api as soon as possible
-    /// since this struct type is deprecated.
-    public var predicate: Predicate<T> {
-        return Predicate.fromDeprecatedMatcher(self)
-    }
+  /// Compatibility layer to new Matcher API. Converts an old-style matcher to a new one.
+  /// Note: You should definitely spend the time to convert to the new api as soon as possible
+  /// since this struct type is deprecated.
+  public var predicate: Predicate<T> {
+    return Predicate.fromDeprecatedMatcher(self)
+  }
 }

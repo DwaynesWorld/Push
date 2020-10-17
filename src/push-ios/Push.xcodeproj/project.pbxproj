@@ -273,6 +273,7 @@
 				68BF92AD253A450A00DBB260 /* Frameworks */,
 				68BF92AE253A450A00DBB260 /* Resources */,
 				211BF56980F06FFCC0F84F6B /* [CP] Embed Pods Frameworks */,
+				68BF9358253B704200DBB260 /* Lint Source Files */,
 			);
 			buildRules = (
 			);
@@ -470,6 +471,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		68BF9358253B704200DBB260 /* Lint Source Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Source Files";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swift-format >/dev/null; then\n    swift-format -m lint -r ${PROJECT_DIR}/Push\n    swift-format -m lint -r ${PROJECT_DIR}/PushTests\n    swift-format -m lint -r ${PROJECT_DIR}/PushUITests\n    exit 0\nelse\n    echo \"warning: swift-format not installed\"\nfi\n";
 		};
 		695CC4A73A93CEF7D09D8F85 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

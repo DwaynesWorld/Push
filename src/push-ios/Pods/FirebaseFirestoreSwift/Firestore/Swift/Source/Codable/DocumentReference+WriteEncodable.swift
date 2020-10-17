@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 extension DocumentReference {
   /// Encodes an instance of `Encodable` and overwrites the encoded data
@@ -31,9 +31,11 @@ extension DocumentReference {
   ///                 written to the server. This block will not be called while
   ///                 the client is offline, though local changes will be visible
   ///                 immediately.
-  public func setData<T: Encodable>(from value: T,
-                                    encoder: Firestore.Encoder = Firestore.Encoder(),
-                                    completion: ((Error?) -> Void)? = nil) throws {
+  public func setData<T: Encodable>(
+    from value: T,
+    encoder: Firestore.Encoder = Firestore.Encoder(),
+    completion: ((Error?) -> Void)? = nil
+  ) throws {
     setData(try encoder.encode(value), completion: completion)
   }
 
@@ -53,10 +55,12 @@ extension DocumentReference {
   ///                 written to the server. This block will not be called while
   ///                 the client is offline, though local changes will be visible
   ///                 immediately.
-  public func setData<T: Encodable>(from value: T,
-                                    merge: Bool,
-                                    encoder: Firestore.Encoder = Firestore.Encoder(),
-                                    completion: ((Error?) -> Void)? = nil) throws {
+  public func setData<T: Encodable>(
+    from value: T,
+    merge: Bool,
+    encoder: Firestore.Encoder = Firestore.Encoder(),
+    completion: ((Error?) -> Void)? = nil
+  ) throws {
     setData(try encoder.encode(value), merge: merge, completion: completion)
   }
 
@@ -80,10 +84,12 @@ extension DocumentReference {
   ///                 written to the server. This block will not be called while
   ///                 the client is offline, though local changes will be visible
   ///                 immediately.
-  public func setData<T: Encodable>(from value: T,
-                                    mergeFields: [Any],
-                                    encoder: Firestore.Encoder = Firestore.Encoder(),
-                                    completion: ((Error?) -> Void)? = nil) throws {
+  public func setData<T: Encodable>(
+    from value: T,
+    mergeFields: [Any],
+    encoder: Firestore.Encoder = Firestore.Encoder(),
+    completion: ((Error?) -> Void)? = nil
+  ) throws {
     setData(try encoder.encode(value), mergeFields: mergeFields, completion: completion)
   }
 }

@@ -17,7 +17,7 @@ final class NodeTree {
 
 extension Array where Element == ShapeItem {
   func initializeNodeTree() -> NodeTree {
-    
+
     let nodeTree = NodeTree()
 
     for item in self {
@@ -64,14 +64,15 @@ extension Array where Element == ShapeItem {
         nodeTree.rootNode = node
         nodeTree.childrenNodes.append(node)
       } else if let trim = item as? Trim {
-        let node = TrimPathNode(parentNode: nodeTree.rootNode, trim: trim, upstreamPaths: nodeTree.paths)
+        let node = TrimPathNode(
+          parentNode: nodeTree.rootNode, trim: trim, upstreamPaths: nodeTree.paths)
         nodeTree.rootNode = node
         nodeTree.childrenNodes.append(node)
       } else if let xform = item as? ShapeTransform {
         nodeTree.transform = xform
         continue
       } else if let group = item as? Group {
-        
+
         let tree = group.items.initializeNodeTree()
         let node = GroupNode(name: group.name, parentNode: nodeTree.rootNode, tree: tree)
         nodeTree.rootNode = node
@@ -80,12 +81,12 @@ extension Array where Element == ShapeItem {
         nodeTree.paths.append(contentsOf: tree.paths)
         nodeTree.renderContainers.append(node.container)
       }
-      
+
       if let pathNode = nodeTree.rootNode as? PathNode {
         //// Add path container to the node tree
         nodeTree.paths.append(pathNode.pathOutput)
       }
-      
+
       if let renderNode = nodeTree.rootNode as? RenderNode {
         nodeTree.renderContainers.append(ShapeRenderLayer(renderer: renderNode.renderer))
       }

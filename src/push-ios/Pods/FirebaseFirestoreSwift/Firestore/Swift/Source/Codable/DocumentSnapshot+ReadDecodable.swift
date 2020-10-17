@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 extension DocumentSnapshot {
   /// Retrieves all fields in a document and converts them to an instance of
@@ -27,8 +27,10 @@ extension DocumentSnapshot {
   ///   - type: The type to convert the document fields to.
   ///   - decoder: The decoder to use to convert the document. `nil` to use
   ///              default decoder.
-  public func data<T: Decodable>(as type: T.Type,
-                                 decoder: Firestore.Decoder? = nil) throws -> T? {
+  public func data<T: Decodable>(
+    as type: T.Type,
+    decoder: Firestore.Decoder? = nil
+  ) throws -> T? {
     var d = decoder
     if d == nil {
       d = Firestore.Decoder()

@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 internal func isFirestorePassthroughType<T: Any>(_ value: T) -> Bool {
   return
-    T.self == GeoPoint.self ||
-    T.self == Timestamp.self ||
-    T.self == FieldValue.self ||
-    T.self == DocumentReference.self
+    T.self == GeoPoint.self || T.self == Timestamp.self || T.self == FieldValue.self
+    || T.self == DocumentReference.self
 }

@@ -3,7 +3,7 @@
 //  Push
 //
 //  Created by Kyle Thompson on 10/16/20.
-//  
+//
 //
 
 import SwiftUI
@@ -17,11 +17,8 @@ struct LoadingView: View {
   }
 }
 
-#if DEBUG
 struct LoadingView_Previews: PreviewProvider {
   static var previews: some View {
     LoadingView()
   }
 }
-#endif
-

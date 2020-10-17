@@ -6,26 +6,26 @@ import Foundation
 // when calling `XCTFail`. Under the Objective-C runtime (i.e. building on Mac), we
 // have to use `String` instead because StaticString can't be generated from Objective-C
 #if SWIFT_PACKAGE
-public typealias FileString = StaticString
+  public typealias FileString = StaticString
 #else
-public typealias FileString = String
+  public typealias FileString = String
 #endif
 
 public final class SourceLocation: NSObject {
-    public let file: FileString
-    public let line: UInt
+  public let file: FileString
+  public let line: UInt
 
-    override init() {
-        file = "Unknown File"
-        line = 0
-    }
+  override init() {
+    file = "Unknown File"
+    line = 0
+  }
 
-    init(file: FileString, line: UInt) {
-        self.file = file
-        self.line = line
-    }
+  init(file: FileString, line: UInt) {
+    self.file = file
+    self.line = line
+  }
 
-    override public var description: String {
-        return "\(file):\(line)"
-    }
+  override public var description: String {
+    return "\(file):\(line)"
+  }
 }

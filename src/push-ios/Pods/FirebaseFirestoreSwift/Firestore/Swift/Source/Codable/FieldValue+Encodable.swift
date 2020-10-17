@@ -16,7 +16,7 @@
 
 import FirebaseFirestore
 
-/** Extends FieldValue to conform to Encodable. */
+/// Extends FieldValue to conform to Encodable.
 extension FieldValue: Encodable {
   /// Encoding a FieldValue will throw by default unless the encoder implementation
   /// explicitly handles it, which is what Firestore.Encoder does.

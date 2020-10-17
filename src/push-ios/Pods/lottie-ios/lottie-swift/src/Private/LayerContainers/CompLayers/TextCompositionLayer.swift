@@ -5,16 +5,16 @@
 //  Created by Brandon Withrow on 1/25/19.
 //
 
-import Foundation
 import CoreGraphics
-import QuartzCore
 import CoreText
+import Foundation
+import QuartzCore
 
 /// Needed for NSMutableParagraphStyle...
 #if os(OSX)
-import AppKit
+  import AppKit
 #else
-import UIKit
+  import UIKit
 #endif
 
 class DisabledTextLayer: CATextLayer {
@@ -34,7 +34,7 @@ extension TextJustification {
       return .center
     }
   }
-  
+
   var caTextAlignement: CATextLayerAlignmentMode {
     switch self {
     case .left:
@@ -45,18 +45,18 @@ extension TextJustification {
       return .center
     }
   }
-  
+
 }
 
 final class TextCompositionLayer: CompositionLayer {
-  
+
   let rootNode: TextAnimatorNode?
   let textDocument: KeyframeInterpolator<TextDocument>?
-  
+
   let textLayer: DisabledTextLayer = DisabledTextLayer()
   let textStrokeLayer: DisabledTextLayer = DisabledTextLayer()
   var textProvider: AnimationTextProvider
-  
+
   init(textLayer: TextLayerModel, textProvider: AnimationTextProvider) {
     var rootNode: TextAnimatorNode?
     for animator in textLayer.animators {
@@ -64,9 +64,9 @@ final class TextCompositionLayer: CompositionLayer {
     }
     self.rootNode = rootNode
     self.textDocument = KeyframeInterpolator(keyframes: textLayer.text.keyframes)
-    
+
     self.textProvider = textProvider
-    
+
     super.init(layer: textLayer, size: .zero)
     contentsLayer.addSublayer(self.textLayer)
     contentsLayer.addSublayer(self.textStrokeLayer)
@@ -75,11 +75,11 @@ final class TextCompositionLayer: CompositionLayer {
     self.textLayer.isWrapped = true
     self.textStrokeLayer.isWrapped = true
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   override init(layer: Any) {
     /// Used for creating shadow model layers. Read More here: https://developer.apple.com/documentation/quartzcore/calayer/1410842-init
     guard let layer = layer as? TextCompositionLayer else {
@@ -87,45 +87,46 @@ final class TextCompositionLayer: CompositionLayer {
     }
     self.rootNode = nil
     self.textDocument = nil
-    
+
     self.textProvider = DefaultTextProvider()
-    
+
     super.init(layer: layer)
   }
-  
+
   override func displayContentsWithFrame(frame: CGFloat, forceUpdates: Bool) {
     guard let textDocument = textDocument else { return }
-    
+
     textLayer.contentsScale = self.renderScale
     textStrokeLayer.contentsScale = self.renderScale
-    
+
     let documentUpdate = textDocument.hasUpdate(frame: frame)
     let animatorUpdate = rootNode?.updateContents(frame, forceLocalUpdate: forceUpdates) ?? false
     guard documentUpdate == true || animatorUpdate == true else { return }
-    
+
     rootNode?.rebuildOutputs(frame: frame)
-    
+
     let text = textDocument.value(frame: frame) as! TextDocument
     let fillColor = rootNode?.textOutputNode.fillColor ?? text.fillColorData.cgColorValue
     let strokeColor = rootNode?.textOutputNode.strokeColor ?? text.strokeColorData?.cgColorValue
     let strokeWidth = rootNode?.textOutputNode.strokeWidth ?? CGFloat(text.strokeWidth ?? 0)
-    let tracking = (CGFloat(text.fontSize) * (rootNode?.textOutputNode.tracking ?? CGFloat(text.tracking))) / 1000.0
-    
+    let tracking =
+      (CGFloat(text.fontSize) * (rootNode?.textOutputNode.tracking ?? CGFloat(text.tracking)))
+      / 1000.0
+
     let matrix = rootNode?.textOutputNode.xform ?? CATransform3DIdentity
     let ctFont = CTFontCreateWithName(text.fontFamily as CFString, CGFloat(text.fontSize), nil)
-    
+
     let textString = textProvider.textFor(keypathName: self.keypathName, sourceText: text.text)
-    
+
     // TODO Fix Line hegith.
-    var attributes: [NSAttributedString.Key : Any] = [
+    var attributes: [NSAttributedString.Key: Any] = [
       NSAttributedString.Key.font: ctFont,
       NSAttributedString.Key.foregroundColor: fillColor,
       NSAttributedString.Key.kern: tracking,
     ]
-    
-    
-    let baseAttributedString = NSAttributedString(string: textString, attributes: attributes )
-    
+
+    let baseAttributedString = NSAttributedString(string: textString, attributes: attributes)
+
     if let strokeColor = strokeColor {
       textStrokeLayer.isHidden = false
       attributes[NSAttributedString.Key.strokeColor] = strokeColor
@@ -133,11 +134,12 @@ final class TextCompositionLayer: CompositionLayer {
     } else {
       textStrokeLayer.isHidden = true
     }
-    
+
     let size: CGSize
     let normalizedAnchor: CGPoint
-    let strokeAttributedString: NSAttributedString = NSAttributedString(string: textString, attributes: attributes )
-    
+    let strokeAttributedString: NSAttributedString = NSAttributedString(
+      string: textString, attributes: attributes)
+
     if let frameSize = text.textFrameSize {
       // Compute geometry for a text block that fits in a specified frame.
       size = CGSize(width: frameSize.x, height: frameSize.y)
@@ -147,13 +149,14 @@ final class TextCompositionLayer: CompositionLayer {
       let framesetter = CTFramesetterCreateWithAttributedString(strokeAttributedString)
       size = CTFramesetterSuggestFrameSizeWithConstraints(
         framesetter,
-        CFRange(location: 0,length: 0),
+        CFRange(location: 0, length: 0),
         nil,
-        CGSize(width: CGFloat.greatestFiniteMagnitude,
-               height: CGFloat.greatestFiniteMagnitude),
+        CGSize(
+          width: CGFloat.greatestFiniteMagnitude,
+          height: CGFloat.greatestFiniteMagnitude),
         nil
       )
-      
+
       let baselinePosition = CTFontGetAscent(ctFont)
       let textAnchor: CGPoint
       switch text.justification {
@@ -164,11 +167,12 @@ final class TextCompositionLayer: CompositionLayer {
       case .center:
         textAnchor = CGPoint(x: size.width * 0.5, y: baselinePosition)
       }
-      
-      normalizedAnchor = CGPoint(x: textAnchor.x.remap(fromLow: 0, fromHigh: size.width, toLow: 0, toHigh: 1),
-                                 y: textAnchor.y.remap(fromLow: 0, fromHigh: size.height, toLow: 0, toHigh: 1))
+
+      normalizedAnchor = CGPoint(
+        x: textAnchor.x.remap(fromLow: 0, fromHigh: size.width, toLow: 0, toHigh: 1),
+        y: textAnchor.y.remap(fromLow: 0, fromHigh: size.height, toLow: 0, toHigh: 1))
     }
-    
+
     if textStrokeLayer.isHidden == false {
       if text.strokeOverFill ?? false {
         textStrokeLayer.removeFromSuperlayer()
@@ -186,7 +190,7 @@ final class TextCompositionLayer: CompositionLayer {
       textStrokeLayer.string = strokeAttributedString
       textStrokeLayer.alignmentMode = text.justification.caTextAlignement
     }
-    
+
     textLayer.anchorPoint = normalizedAnchor
     textLayer.opacity = Float(rootNode?.textOutputNode.opacity ?? 1)
     textLayer.transform = CATransform3DIdentity
@@ -196,7 +200,7 @@ final class TextCompositionLayer: CompositionLayer {
     textLayer.string = baseAttributedString
     textLayer.alignmentMode = text.justification.caTextAlignement
   }
-  
+
   override func updateRenderScale() {
     super.updateRenderScale()
     textLayer.contentsScale = self.renderScale

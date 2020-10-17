@@ -39,24 +39,32 @@ extension Firestore {
       // SelfDocumentID, DocumentReference and FieldValue cannot be
       // encoded directly.
       guard T.self != DocumentReference.self,
-        T.self != FieldValue.self else {
-        throw EncodingError
-          .invalidValue(value,
-                        EncodingError
-                          .Context(codingPath: [],
-                                   debugDescription: "Top-level \(T.self) is not allowed."))
+        T.self != FieldValue.self
+      else {
+        throw
+          EncodingError
+          .invalidValue(
+            value,
+            EncodingError
+              .Context(
+                codingPath: [],
+                debugDescription: "Top-level \(T.self) is not allowed."))
       }
       guard let topLevel = try _FirestoreEncoder().box_(value) else {
-        throw EncodingError.invalidValue(value,
-                                         EncodingError.Context(codingPath: [],
-                                                               debugDescription: "Top-level \(T.self) did not encode any values."))
+        throw EncodingError.invalidValue(
+          value,
+          EncodingError.Context(
+            codingPath: [],
+            debugDescription: "Top-level \(T.self) did not encode any values."))
       }
 
       // This is O(n) check. Consider refactoring box_ to return [String: Any].
       guard let dict = topLevel as? [String: Any] else {
-        throw EncodingError.invalidValue(value,
-                                         EncodingError.Context(codingPath: [],
-                                                               debugDescription: "Top-level \(T.self) encoded not as dictionary."))
+        throw EncodingError.invalidValue(
+          value,
+          EncodingError.Context(
+            codingPath: [],
+            debugDescription: "Top-level \(T.self) encoded not as dictionary."))
       }
       return dict
     }
@@ -103,14 +111,17 @@ private class _FirestoreEncoder: Encoder {
       topContainer = storage.pushKeyedContainer()
     } else {
       guard let container = storage.containers.last as? NSMutableDictionary else {
-        preconditionFailure("Attempt to push new keyed encoding container when already previously encoded at this path.")
+        preconditionFailure(
+          "Attempt to push new keyed encoding container when already previously encoded at this path."
+        )
       }
 
       topContainer = container
     }
 
-    let container = _FirestoreKeyedEncodingContainer<Key>(referencing: self, codingPath: codingPath,
-                                                          wrapping: topContainer)
+    let container = _FirestoreKeyedEncodingContainer<Key>(
+      referencing: self, codingPath: codingPath,
+      wrapping: topContainer)
     return KeyedEncodingContainer(container)
   }
 
@@ -122,14 +133,17 @@ private class _FirestoreEncoder: Encoder {
       topContainer = storage.pushUnkeyedContainer()
     } else {
       guard let container = storage.containers.last as? NSMutableArray else {
-        preconditionFailure("Attempt to push new unkeyed encoding container when already previously encoded at this path.")
+        preconditionFailure(
+          "Attempt to push new unkeyed encoding container when already previously encoded at this path."
+        )
       }
 
       topContainer = container
     }
 
-    return _FirestoreUnkeyedEncodingContainer(referencing: self, codingPath: codingPath,
-                                              wrapping: topContainer)
+    return _FirestoreUnkeyedEncodingContainer(
+      referencing: self, codingPath: codingPath,
+      wrapping: topContainer)
   }
 
   public func singleValueContainer() -> SingleValueEncodingContainer {
@@ -195,9 +209,11 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
   // MARK: - Initialization
 
   /// Initializes `self` with the given references.
-  fileprivate init(referencing encoder: _FirestoreEncoder,
-                   codingPath: [CodingKey],
-                   wrapping container: NSMutableDictionary) {
+  fileprivate init(
+    referencing encoder: _FirestoreEncoder,
+    codingPath: [CodingKey],
+    wrapping container: NSMutableDictionary
+  ) {
     self.encoder = encoder
     self.codingPath = codingPath
     self.container = container
@@ -268,7 +284,7 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
       if T.self is DocumentIDProtocol.Type {
         return
       }
-    #endif // compiler(>=5.1)
+    #endif  // compiler(>=5.1)
 
     encoder.codingPath.append(key)
     defer {
@@ -277,9 +293,12 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
     container[key.stringValue] = try encoder.box(value)
   }
 
-  public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey.Type,
-                                                  forKey key: Key)
-    -> KeyedEncodingContainer<NestedKey> {
+  public mutating func nestedContainer<NestedKey>(
+    keyedBy _: NestedKey.Type,
+    forKey key: Key
+  )
+    -> KeyedEncodingContainer<NestedKey>
+  {
     let dictionary = NSMutableDictionary()
     self.container[key.stringValue] = dictionary
 
@@ -288,9 +307,10 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
       codingPath.removeLast()
     }
 
-    let container = _FirestoreKeyedEncodingContainer<NestedKey>(referencing: encoder,
-                                                                codingPath: codingPath,
-                                                                wrapping: dictionary)
+    let container = _FirestoreKeyedEncodingContainer<NestedKey>(
+      referencing: encoder,
+      codingPath: codingPath,
+      wrapping: dictionary)
     return KeyedEncodingContainer(container)
   }
 
@@ -302,13 +322,15 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
     defer {
       codingPath.removeLast()
     }
-    return _FirestoreUnkeyedEncodingContainer(referencing: encoder, codingPath: codingPath,
-                                              wrapping: array)
+    return _FirestoreUnkeyedEncodingContainer(
+      referencing: encoder, codingPath: codingPath,
+      wrapping: array)
   }
 
   public mutating func superEncoder() -> Encoder {
-    return _FirestoreReferencingEncoder(referencing: encoder, at: _FirestoreKey.super,
-                                        wrapping: container)
+    return _FirestoreReferencingEncoder(
+      referencing: encoder, at: _FirestoreKey.super,
+      wrapping: container)
   }
 
   public mutating func superEncoder(forKey key: Key) -> Encoder {
@@ -336,9 +358,11 @@ private struct _FirestoreUnkeyedEncodingContainer: UnkeyedEncodingContainer {
   // MARK: - Initialization
 
   /// Initializes `self` with the given references.
-  fileprivate init(referencing encoder: _FirestoreEncoder,
-                   codingPath: [CodingKey],
-                   wrapping container: NSMutableArray) {
+  fileprivate init(
+    referencing encoder: _FirestoreEncoder,
+    codingPath: [CodingKey],
+    wrapping container: NSMutableArray
+  ) {
     self.encoder = encoder
     self.codingPath = codingPath
     self.container = container
@@ -364,13 +388,15 @@ private struct _FirestoreUnkeyedEncodingContainer: UnkeyedEncodingContainer {
 
   public mutating func encode<T: Encodable>(_ value: T) throws {
     encoder.codingPath.append(_FirestoreKey(index: count))
-    defer { encoder.codingPath.removeLast()
+    defer {
+      encoder.codingPath.removeLast()
     }
     container.add(try encoder.box(value))
   }
 
-  public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey
-    .Type) -> KeyedEncodingContainer<NestedKey> {
+  public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey.Type)
+    -> KeyedEncodingContainer<NestedKey>
+  {
     codingPath.append(_FirestoreKey(index: count))
     defer {
       self.codingPath.removeLast()
@@ -379,9 +405,10 @@ private struct _FirestoreUnkeyedEncodingContainer: UnkeyedEncodingContainer {
     let dictionary = NSMutableDictionary()
     self.container.add(dictionary)
 
-    let container = _FirestoreKeyedEncodingContainer<NestedKey>(referencing: encoder,
-                                                                codingPath: codingPath,
-                                                                wrapping: dictionary)
+    let container = _FirestoreKeyedEncodingContainer<NestedKey>(
+      referencing: encoder,
+      codingPath: codingPath,
+      wrapping: dictionary)
     return KeyedEncodingContainer(container)
   }
 
@@ -393,13 +420,15 @@ private struct _FirestoreUnkeyedEncodingContainer: UnkeyedEncodingContainer {
 
     let array = NSMutableArray()
     container.add(array)
-    return _FirestoreUnkeyedEncodingContainer(referencing: encoder, codingPath: codingPath,
-                                              wrapping: array)
+    return _FirestoreUnkeyedEncodingContainer(
+      referencing: encoder, codingPath: codingPath,
+      wrapping: array)
   }
 
   public mutating func superEncoder() -> Encoder {
-    return _FirestoreReferencingEncoder(referencing: encoder, at: container.count,
-                                        wrapping: container)
+    return _FirestoreReferencingEncoder(
+      referencing: encoder, at: container.count,
+      wrapping: container)
   }
 }
 
@@ -486,8 +515,10 @@ extension _FirestoreEncoder: SingleValueEncodingContainer {
   // MARK: - SingleValueEncodingContainer Methods
 
   private func assertCanEncodeNewValue() {
-    precondition(shouldAllocateNewContainer,
-                 "Attempt to encode value through single value container when previously value already encoded.")
+    precondition(
+      shouldAllocateNewContainer,
+      "Attempt to encode value through single value container when previously value already encoded."
+    )
   }
 
   public func encodeNil() throws {
@@ -598,9 +629,11 @@ private class _FirestoreReferencingEncoder: _FirestoreEncoder {
   // MARK: - Initialization
 
   /// Initializes `self` by referencing the given array container in the given encoder.
-  fileprivate init(referencing encoder: _FirestoreEncoder,
-                   at index: Int,
-                   wrapping array: NSMutableArray) {
+  fileprivate init(
+    referencing encoder: _FirestoreEncoder,
+    at index: Int,
+    wrapping array: NSMutableArray
+  ) {
     self.encoder = encoder
     reference = .array(array, index)
     super.init()
@@ -610,9 +643,11 @@ private class _FirestoreReferencingEncoder: _FirestoreEncoder {
   }
 
   /// Initializes `self` by referencing the given dictionary container in the given encoder.
-  fileprivate init(referencing encoder: _FirestoreEncoder,
-                   at key: CodingKey,
-                   wrapping dictionary: NSMutableDictionary) {
+  fileprivate init(
+    referencing encoder: _FirestoreEncoder,
+    at key: CodingKey,
+    wrapping dictionary: NSMutableDictionary
+  ) {
     self.encoder = encoder
     reference = .dictionary(dictionary, key.stringValue)
     super.init()

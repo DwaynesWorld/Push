@@ -77,7 +77,8 @@ import FirebaseFirestore
   /// Firestore.Encoder leads to an error.
   @propertyWrapper
   public struct DocumentID<Value: DocumentIDWrappable & Codable & Equatable>:
-    DocumentIDProtocol, Codable, Equatable {
+    DocumentIDProtocol, Codable, Equatable
+  {
     var value: Value?
 
     public init(wrappedValue value: Value?) {
@@ -117,4 +118,4 @@ import FirebaseFirestore
       return lhs.value == rhs.value
     }
   }
-#endif // compiler(>=5.1)
+#endif  // compiler(>=5.1)

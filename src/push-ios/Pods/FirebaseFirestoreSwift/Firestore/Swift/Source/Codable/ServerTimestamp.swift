@@ -81,7 +81,7 @@ import FirebaseFirestore
   /// current timestamp.
   @propertyWrapper
   public struct ServerTimestamp<Value>: Codable, Equatable
-    where Value: ServerTimestampWrappable & Codable & Equatable {
+  where Value: ServerTimestampWrappable & Codable & Equatable {
     var value: Value?
 
     public init(wrappedValue value: Value?) {
@@ -113,7 +113,7 @@ import FirebaseFirestore
       }
     }
   }
-#endif // compiler(>=5.1)
+#endif  // compiler(>=5.1)
 
 /// A compatibility version of `ServerTimestamp` that does not use property
 /// wrappers, suitable for use in older versions of Swift.

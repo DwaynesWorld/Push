@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import Foundation
 import FirebaseFirestore
+import Foundation
 
 extension WriteBatch {
   /// Encodes an instance of `Encodable` and overwrites the encoded data
@@ -30,10 +30,13 @@ extension WriteBatch {
   ///   - doc: The document to create/overwrite the encoded data to.
   /// - Returns: This instance of `WriteBatch`. Used for chaining method calls.
   @discardableResult
-  public func setData<T: Encodable>(from value: T,
-                                    forDocument doc: DocumentReference,
-                                    encoder: Firestore.Encoder = Firestore
-                                      .Encoder()) throws -> WriteBatch {
+  public func setData<T: Encodable>(
+    from value: T,
+    forDocument doc: DocumentReference,
+    encoder: Firestore.Encoder =
+      Firestore
+      .Encoder()
+  ) throws -> WriteBatch {
     setData(try encoder.encode(value), forDocument: doc)
     return self
   }
@@ -53,11 +56,14 @@ extension WriteBatch {
   ///   - encoder: The encoder instance to use to run the encoding.
   /// - Returns: This instance of `WriteBatch`. Used for chaining method calls.
   @discardableResult
-  public func setData<T: Encodable>(from value: T,
-                                    forDocument doc: DocumentReference,
-                                    merge: Bool,
-                                    encoder: Firestore.Encoder = Firestore
-                                      .Encoder()) throws -> WriteBatch {
+  public func setData<T: Encodable>(
+    from value: T,
+    forDocument doc: DocumentReference,
+    merge: Bool,
+    encoder: Firestore.Encoder =
+      Firestore
+      .Encoder()
+  ) throws -> WriteBatch {
     setData(try encoder.encode(value), forDocument: doc, merge: merge)
     return self
   }
@@ -81,11 +87,14 @@ extension WriteBatch {
   ///   - encoder: The encoder instance to use to run the encoding.
   /// - Returns: This instance of `WriteBatch`. Used for chaining method calls.
   @discardableResult
-  public func setData<T: Encodable>(from value: T,
-                                    forDocument doc: DocumentReference,
-                                    mergeFields: [Any],
-                                    encoder: Firestore.Encoder = Firestore
-                                      .Encoder()) throws -> WriteBatch {
+  public func setData<T: Encodable>(
+    from value: T,
+    forDocument doc: DocumentReference,
+    mergeFields: [Any],
+    encoder: Firestore.Encoder =
+      Firestore
+      .Encoder()
+  ) throws -> WriteBatch {
     setData(try encoder.encode(value), forDocument: doc, mergeFields: mergeFields)
     return self
   }

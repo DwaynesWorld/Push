@@ -37,9 +37,11 @@ extension Firestore {
     ///   - document: A reference to the Firestore Document that is being
     ///             decoded.
     /// - Returns: An instance of specified type by the first parameter.
-    public func decode<T: Decodable>(_: T.Type,
-                                     from container: [String: Any],
-                                     in document: DocumentReference? = nil) throws -> T {
+    public func decode<T: Decodable>(
+      _: T.Type,
+      from container: [String: Any],
+      in document: DocumentReference? = nil
+    ) throws -> T {
       let decoder = _FirestoreDecoder(referencing: container)
       if let doc = document {
         decoder.userInfo[Firestore.Decoder.documentRefUserInfoKey!] = doc
@@ -48,8 +50,9 @@ extension Firestore {
       guard let value = try decoder.unbox(container, as: T.self) else {
         throw DecodingError.valueNotFound(
           T.self,
-          DecodingError.Context(codingPath: [],
-                                debugDescription: "The given dictionary was invalid")
+          DecodingError.Context(
+            codingPath: [],
+            debugDescription: "The given dictionary was invalid")
         )
       }
       return value
@@ -88,13 +91,16 @@ class _FirestoreDecoder: Decoder {
 
   public func container<Key>(keyedBy _: Key.Type) throws -> KeyedDecodingContainer<Key> {
     guard !(storage.topContainer is NSNull) else {
-      throw DecodingError.valueNotFound(KeyedDecodingContainer<Key>.self,
-                                        DecodingError.Context(codingPath: codingPath,
-                                                              debugDescription: "Cannot get keyed decoding container -- found null value instead."))
+      throw DecodingError.valueNotFound(
+        KeyedDecodingContainer<Key>.self,
+        DecodingError.Context(
+          codingPath: codingPath,
+          debugDescription: "Cannot get keyed decoding container -- found null value instead."))
     }
 
     guard let topContainer = storage.topContainer as? [String: Any] else {
-      let context = DecodingError
+      let context =
+        DecodingError
         .Context(codingPath: codingPath, debugDescription: "Not a dictionary")
       throw DecodingError.typeMismatch([String: Any].self, context)
     }
@@ -105,9 +111,11 @@ class _FirestoreDecoder: Decoder {
 
   public func unkeyedContainer() throws -> UnkeyedDecodingContainer {
     guard !(storage.topContainer is NSNull) else {
-      throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
-                                        DecodingError.Context(codingPath: codingPath,
-                                                              debugDescription: "Cannot get unkeyed decoding container -- found null value instead."))
+      throw DecodingError.valueNotFound(
+        UnkeyedDecodingContainer.self,
+        DecodingError.Context(
+          codingPath: codingPath,
+          debugDescription: "Cannot get unkeyed decoding container -- found null value instead."))
     }
 
     guard let topContainer = storage.topContainer as? [Any] else {
@@ -337,23 +345,24 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
   public func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
     #if compiler(>=5.1)
       if let type = type as? DocumentIDProtocol.Type {
-        let docRef = decoder.userInfo[
-          Firestore.Decoder.documentRefUserInfoKey!
-        ] as! DocumentReference?
+        let docRef =
+          decoder.userInfo[
+            Firestore.Decoder.documentRefUserInfoKey!
+          ] as! DocumentReference?
 
         if contains(key) {
           let docPath = (docRef != nil) ? docRef!.path : "nil"
           var codingPathCopy = codingPath.map { key in key.stringValue }
           codingPathCopy.append(key.stringValue)
 
-          throw FirestoreDecodingError.fieldNameConflict("Field name " +
-            "\(codingPathCopy) was found from document \"\(docPath)\", " +
-            "cannot assign the document reference to this field.")
+          throw FirestoreDecodingError.fieldNameConflict(
+            "Field name " + "\(codingPathCopy) was found from document \"\(docPath)\", "
+              + "cannot assign the document reference to this field.")
         }
 
         return try type.init(from: docRef) as! T
       }
-    #endif // compiler(>=5.1)
+    #endif  // compiler(>=5.1)
 
     let entry = try require(key: key)
 
@@ -370,7 +379,8 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
     }
 
     let description = "No value associated with key \(key) (\"\(key.stringValue)\")."
-    let context = DecodingError
+    let context =
+      DecodingError
       .Context(codingPath: decoder.codingPath, debugDescription: description)
     throw DecodingError.keyNotFound(key, context)
   }
@@ -385,25 +395,33 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
     throw DecodingError.valueNotFound(T.self, context)
   }
 
-  public func nestedContainer<NestedKey>(keyedBy _: NestedKey.Type,
-                                         forKey key: Key) throws
-    -> KeyedDecodingContainer<NestedKey> {
+  public func nestedContainer<NestedKey>(
+    keyedBy _: NestedKey.Type,
+    forKey key: Key
+  ) throws
+    -> KeyedDecodingContainer<NestedKey>
+  {
     decoder.codingPath.append(key)
     defer { self.decoder.codingPath.removeLast() }
 
     guard let value = self.container[key.stringValue] else {
-      throw DecodingError.valueNotFound(KeyedDecodingContainer<NestedKey>.self,
-                                        DecodingError.Context(codingPath: codingPath,
-                                                              debugDescription: "Cannot get nested keyed container -- no value found for key \"\(key.stringValue)\""))
+      throw DecodingError.valueNotFound(
+        KeyedDecodingContainer<NestedKey>.self,
+        DecodingError.Context(
+          codingPath: codingPath,
+          debugDescription:
+            "Cannot get nested keyed container -- no value found for key \"\(key.stringValue)\""))
     }
 
     guard let dictionary = value as? [String: Any] else {
-      throw DecodingError
+      throw
+        DecodingError
         ._typeMismatch(at: codingPath, expectation: [String: Any].self, reality: value)
     }
 
-    let container = _FirestoreKeyedDecodingContainer<NestedKey>(referencing: decoder,
-                                                                wrapping: dictionary)
+    let container = _FirestoreKeyedDecodingContainer<NestedKey>(
+      referencing: decoder,
+      wrapping: dictionary)
     return KeyedDecodingContainer(container)
   }
 
@@ -412,9 +430,12 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
     defer { self.decoder.codingPath.removeLast() }
 
     guard let value = container[key.stringValue] else {
-      throw DecodingError.valueNotFound(UnkeyedDecodingContainer.self,
-                                        DecodingError.Context(codingPath: codingPath,
-                                                              debugDescription: "Cannot get nested unkeyed container -- no value found for key \"\(key.stringValue)\""))
+      throw DecodingError.valueNotFound(
+        UnkeyedDecodingContainer.self,
+        DecodingError.Context(
+          codingPath: codingPath,
+          debugDescription:
+            "Cannot get nested unkeyed container -- no value found for key \"\(key.stringValue)\""))
     }
 
     guard let array = value as? [Any] else {
@@ -638,8 +659,9 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     return try require(value: decoded)
   }
 
-  public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey
-    .Type) throws -> KeyedDecodingContainer<NestedKey> {
+  public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey.Type) throws
+    -> KeyedDecodingContainer<NestedKey>
+  {
     decoder.codingPath.append(_FirestoreKey(index: currentIndex))
     defer { self.decoder.codingPath.removeLast() }
 
@@ -649,13 +671,15 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     try requireNotNSNull(value)
 
     guard let dictionary = value as? [String: Any] else {
-      throw DecodingError
+      throw
+        DecodingError
         ._typeMismatch(at: codingPath, expectation: [String: Any].self, reality: value)
     }
 
     currentIndex += 1
-    let container = _FirestoreKeyedDecodingContainer<NestedKey>(referencing: decoder,
-                                                                wrapping: dictionary)
+    let container = _FirestoreKeyedDecodingContainer<NestedKey>(
+      referencing: decoder,
+      wrapping: dictionary)
     return KeyedDecodingContainer(container)
   }
 
@@ -689,12 +713,16 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
 
   private func expectNotAtEnd() throws {
     guard !isAtEnd else {
-      throw DecodingError
-        .valueNotFound(Any?.self,
-                       DecodingError
-                         .Context(codingPath: decoder
-                           .codingPath + [_FirestoreKey(index: currentIndex)],
-                                  debugDescription: "Unkeyed container is at end."))
+      throw
+        DecodingError
+        .valueNotFound(
+          Any?.self,
+          DecodingError
+            .Context(
+              codingPath:
+                decoder
+                .codingPath + [_FirestoreKey(index: currentIndex)],
+              debugDescription: "Unkeyed container is at end."))
     }
   }
 
@@ -711,9 +739,11 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
   private mutating func require<T>(value: T?) throws -> T {
     guard let value = value else {
       let message = "Expected \(T.self) value but found null instead."
-      let context = DecodingError
-        .Context(codingPath: decoder.codingPath + [_FirestoreKey(index: currentIndex)],
-                 debugDescription: message)
+      let context =
+        DecodingError
+        .Context(
+          codingPath: decoder.codingPath + [_FirestoreKey(index: currentIndex)],
+          debugDescription: message)
       throw DecodingError.valueNotFound(T.self, context)
     }
 
@@ -727,11 +757,14 @@ extension _FirestoreDecoder: SingleValueDecodingContainer {
 
   private func expectNonNull<T>(_ type: T.Type) throws {
     guard !decodeNil() else {
-      throw DecodingError
-        .valueNotFound(type,
-                       DecodingError
-                         .Context(codingPath: codingPath,
-                                  debugDescription: "Expected \(type) but found null value instead."))
+      throw
+        DecodingError
+        .valueNotFound(
+          type,
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Expected \(type) but found null value instead."))
     }
   }
 
@@ -836,16 +869,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let int = number.intValue
     guard NSNumber(value: int) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return int
@@ -855,16 +892,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let int8 = number.int8Value
     guard NSNumber(value: int8) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return int8
@@ -874,16 +915,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let int16 = number.int16Value
     guard NSNumber(value: int16) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return int16
@@ -893,16 +938,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let int32 = number.int32Value
     guard NSNumber(value: int32) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return int32
@@ -912,16 +961,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let int64 = number.int64Value
     guard NSNumber(value: int64) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return int64
@@ -931,16 +984,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let uint = number.uintValue
     guard NSNumber(value: uint) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return uint
@@ -950,16 +1007,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let uint8 = number.uint8Value
     guard NSNumber(value: uint8) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return uint8
@@ -969,16 +1030,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let uint16 = number.uint16Value
     guard NSNumber(value: uint16) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return uint16
@@ -988,16 +1053,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let uint32 = number.uint32Value
     guard NSNumber(value: uint32) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return uint32
@@ -1007,16 +1076,20 @@ extension _FirestoreDecoder {
     guard !(value is NSNull) else { return nil }
 
     guard let number = value as? NSNumber, number !== kCFBooleanTrue,
-      number !== kCFBooleanFalse else {
+      number !== kCFBooleanFalse
+    else {
       throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
     }
 
     let uint64 = number.uint64Value
     guard NSNumber(value: uint64) == number else {
-      throw DecodingError
-        .dataCorrupted(DecodingError
-          .Context(codingPath: codingPath,
-                   debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+      throw
+        DecodingError
+        .dataCorrupted(
+          DecodingError
+            .Context(
+              codingPath: codingPath,
+              debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
     }
 
     return uint64
@@ -1034,10 +1107,13 @@ extension _FirestoreDecoder {
       // * If it was a Double or Decimal, you will get back the nearest approximation if it will fit
       let double = number.doubleValue
       guard abs(double) <= Double(Float.greatestFiniteMagnitude) else {
-        throw DecodingError
-          .dataCorrupted(DecodingError
-            .Context(codingPath: codingPath,
-                     debugDescription: "Decoded number \(number) does not fit in \(type)."))
+        throw
+          DecodingError
+          .dataCorrupted(
+            DecodingError
+              .Context(
+                codingPath: codingPath,
+                debugDescription: "Decoded number \(number) does not fit in \(type)."))
       }
 
       return Float(double)
@@ -1116,8 +1192,10 @@ extension _FirestoreDecoder {
         return nil
       }
       guard let url = URL(string: urlString) else {
-        throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath,
-                                                                debugDescription: "Invalid URL string."))
+        throw DecodingError.dataCorrupted(
+          DecodingError.Context(
+            codingPath: codingPath,
+            debugDescription: "Invalid URL string."))
       }
       return (url as! T)
     }
@@ -1142,8 +1220,10 @@ extension _FirestoreDecoder {
 }
 
 extension DecodingError {
-  static func _typeMismatch(at path: [CodingKey], expectation: Any.Type,
-                            reality: Any) -> DecodingError {
+  static func _typeMismatch(
+    at path: [CodingKey], expectation: Any.Type,
+    reality: Any
+  ) -> DecodingError {
     let description =
       "Expected to decode \(expectation) but found \(_typeDescription(of: reality)) instead."
     return .typeMismatch(expectation, Context(codingPath: path, debugDescription: description))
@@ -1152,8 +1232,9 @@ extension DecodingError {
   fileprivate static func _typeDescription(of value: Any) -> String {
     if value is NSNull {
       return "a null value"
-    }
-      else if value is NSNumber /* FIXME: If swift-corelibs-foundation isn't updated to use NSNumber, this check will be necessary: || value is Int || value is Double */ {
+    } else if value
+      is NSNumber /* FIXME: If swift-corelibs-foundation isn't updated to use NSNumber, this check will be necessary: || value is Int || value is Double */
+    {
       return "a number"
     } else if value is String {
       return "a string/data"

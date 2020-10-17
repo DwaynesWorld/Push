@@ -60,7 +60,7 @@ import FirebaseFirestore
       }
     }
   }
-#endif // compiler(>=5.1)
+#endif  // compiler(>=5.1)
 
 /// A compatibility version of `ExplicitNull` that does not use property
 /// wrappers, suitable for use in older versions of Swift.

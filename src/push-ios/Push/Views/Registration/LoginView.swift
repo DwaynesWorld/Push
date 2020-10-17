@@ -3,7 +3,7 @@
 //  Push
 //
 //  Created by Kyle Thompson on 10/16/20.
-//  
+//
 //
 
 import SwiftUI
