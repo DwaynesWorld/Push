@@ -12,8 +12,8 @@ struct MainView: View {
   @State var selectedTab = 1
 
   var body: some View {
-      VStack {
-      
+    VStack {
+
     }
   }
 }
