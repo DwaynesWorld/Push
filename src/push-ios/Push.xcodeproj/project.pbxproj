@@ -23,6 +23,13 @@
 		68BF933E253A4DBA00DBB260 /* TourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF933D253A4DBA00DBB260 /* TourView.swift */; };
 		68BF9347253A4DFD00DBB260 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF9346253A4DFD00DBB260 /* LottieView.swift */; };
 		68BF9350253A4E4100DBB260 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF934F253A4E4100DBB260 /* LoadingView.swift */; };
+		68BF93A0253B87CC00DBB260 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF939F253B87CC00DBB260 /* View+Extensions.swift */; };
+		68BF93AC253B8C2700DBB260 /* PlanDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93AB253B8C2700DBB260 /* PlanDetailsView.swift */; };
+		68BF93B5253B8C5400DBB260 /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93B4253B8C5400DBB260 /* Plan.swift */; };
+		68BF93BD253B8CD700DBB260 /* PushUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93BC253B8CD700DBB260 /* PushUser.swift */; };
+		68BF93CA253B911600DBB260 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93C9253B911600DBB260 /* Exercise.swift */; };
+		68BF93D8253B9BA900DBB260 /* PlanCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93D7253B9BA900DBB260 /* PlanCardView.swift */; };
+		68BF93E0253BA35400DBB260 /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BF93DF253BA35400DBB260 /* CategoryCardView.swift */; };
 		6E10D41C0C428AF4FB40E0A8 /* Pods_PushTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B260A20A141F9387D30BAA8 /* Pods_PushTests.framework */; };
 		73D30D984BF00DC07C439716 /* Pods_Push.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B141D76CA2735E1454A9506 /* Pods_Push.framework */; };
 /* End PBXBuildFile section */
@@ -70,6 +77,13 @@
 		68BF933D253A4DBA00DBB260 /* TourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourView.swift; sourceTree = "<group>"; };
 		68BF9346253A4DFD00DBB260 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		68BF934F253A4E4100DBB260 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		68BF939F253B87CC00DBB260 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		68BF93AB253B8C2700DBB260 /* PlanDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailsView.swift; sourceTree = "<group>"; };
+		68BF93B4253B8C5400DBB260 /* Plan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
+		68BF93BC253B8CD700DBB260 /* PushUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushUser.swift; sourceTree = "<group>"; };
+		68BF93C9253B911600DBB260 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
+		68BF93D7253B9BA900DBB260 /* PlanCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanCardView.swift; sourceTree = "<group>"; };
+		68BF93DF253BA35400DBB260 /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		6B141D76CA2735E1454A9506 /* Pods_Push.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Push.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B260A20A141F9387D30BAA8 /* Pods_PushTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PushTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7145D17B5045386C97CDB1A4 /* Pods-Push.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Push.debug.xcconfig"; path = "Target Support Files/Pods-Push/Pods-Push.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,7 +144,9 @@
 		68BF92B2253A450A00DBB260 /* Push */ = {
 			isa = PBXGroup;
 			children = (
+				68BF93B3253B8C4100DBB260 /* Model */,
 				68BF9307253A47B900DBB260 /* Application */,
+				68BF939E253B87B500DBB260 /* Extensions */,
 				68BF930C253A481B00DBB260 /* Resources */,
 				68BF931C253A4A7C00DBB260 /* ViewModels */,
 				68BF9308253A47CD00DBB260 /* Views */,
@@ -176,6 +192,7 @@
 		68BF9308253A47CD00DBB260 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				68BF93AA253B8BC700DBB260 /* Plan */,
 				68BF9345253A4DE600DBB260 /* Common */,
 				68BF933C253A4D4E00DBB260 /* Onboarding */,
 				68BF9325253A4CBB00DBB260 /* Registration */,
@@ -236,6 +253,34 @@
 			children = (
 			);
 			path = Animations;
+			sourceTree = "<group>";
+		};
+		68BF939E253B87B500DBB260 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				68BF939F253B87CC00DBB260 /* View+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		68BF93AA253B8BC700DBB260 /* Plan */ = {
+			isa = PBXGroup;
+			children = (
+				68BF93AB253B8C2700DBB260 /* PlanDetailsView.swift */,
+				68BF93D7253B9BA900DBB260 /* PlanCardView.swift */,
+				68BF93DF253BA35400DBB260 /* CategoryCardView.swift */,
+			);
+			path = Plan;
+			sourceTree = "<group>";
+		};
+		68BF93B3253B8C4100DBB260 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				68BF93B4253B8C5400DBB260 /* Plan.swift */,
+				68BF93BC253B8CD700DBB260 /* PushUser.swift */,
+				68BF93C9253B911600DBB260 /* Exercise.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		7E370F549C55C26D217E5D77 /* Pods */ = {
@@ -536,14 +581,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68BF93BD253B8CD700DBB260 /* PushUser.swift in Sources */,
+				68BF93CA253B911600DBB260 /* Exercise.swift in Sources */,
 				68BF9330253A4D0000DBB260 /* SignupView.swift in Sources */,
 				68BF9338253A4D3100DBB260 /* MainView.swift in Sources */,
+				68BF93A0253B87CC00DBB260 /* View+Extensions.swift in Sources */,
+				68BF93E0253BA35400DBB260 /* CategoryCardView.swift in Sources */,
+				68BF93B5253B8C5400DBB260 /* Plan.swift in Sources */,
 				68BF9347253A4DFD00DBB260 /* LottieView.swift in Sources */,
 				68BF9350253A4E4100DBB260 /* LoadingView.swift in Sources */,
 				68BF92B4253A450A00DBB260 /* AppDelegate.swift in Sources */,
+				68BF93AC253B8C2700DBB260 /* PlanDetailsView.swift in Sources */,
 				68BF92B6253A450A00DBB260 /* SceneDelegate.swift in Sources */,
 				68BF931E253A4ABE00DBB260 /* RootViewModel.swift in Sources */,
 				68BF9327253A4CDD00DBB260 /* LoginView.swift in Sources */,
+				68BF93D8253B9BA900DBB260 /* PlanCardView.swift in Sources */,
 				68BF933E253A4DBA00DBB260 /* TourView.swift in Sources */,
 				68BF92B8253A450A00DBB260 /* RootView.swift in Sources */,
 			);

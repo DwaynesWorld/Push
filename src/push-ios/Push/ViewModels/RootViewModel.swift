@@ -13,9 +13,9 @@ import Resolver
 class RootViewModel: ObservableObject {
   //  @Injected private var authenticationService: AuthenticationService
   //  @Injected private var userRepository: UserRepository
-  @Published var isLoggedIn: Bool = false
-  @Published var userInitialized: Bool = false
-  @Published var onboardingComplete: Bool = false
+  @Published var isLoggedIn: Bool = true
+  @Published var userInitialized: Bool = true
+  @Published var onboardingComplete: Bool = true
   private var cancellables = Set<AnyCancellable>()
 
   init() {
