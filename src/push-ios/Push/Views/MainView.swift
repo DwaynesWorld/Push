@@ -11,7 +11,6 @@ import SwiftUI
 struct MainView: View {
   @State var selectedTab = 1
   let plans: [Plan] = [testPlan, testPlan]
-  let categories: [String] = ["Uper Body", "Lower Body", "Yoga"]
 
   var body: some View {
     NavigationView {
@@ -28,7 +27,7 @@ struct MainView: View {
           VStack(alignment: .leading) {
             Text("Recommended for you")
               .font(.headline)
-              .bold()
+              .fontWeight(.bold)
               .foregroundColor(Color.primary)
 
             ScrollView(.horizontal, showsIndicators: false) {
@@ -48,13 +47,13 @@ struct MainView: View {
           VStack(alignment: .leading) {
             Text("Browse Categories")
               .font(.headline)
-              .bold()
+              .fontWeight(.bold)
               .foregroundColor(Color.primary)
 
             VStack {
-              ForEach(categories, id: \.self) { category in
+              ForEach(Category.allCases, id: \.self) { cat in
                 NavigationLink(destination: PlanDetailsView(plan: testPlan)) {
-                  CategoryCardView(name: category)
+                  CategoryCardView(name: cat.displayName)
                     .padding(.bottom, 10)
                 }
               }

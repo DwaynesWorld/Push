@@ -14,17 +14,25 @@ struct CategoryCardView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16.0) {
-      Image("test_image_2")
-        .resizable().renderingMode(.original)
-        .aspectRatio(contentMode: ContentMode.fill)
-        .frame(height: 170)
-        .cornerRadius(10)
-        .shadow(radius: 10)
+      ZStack {
+        Image("test_image_2")
+          .resizable().renderingMode(.original)
+          .aspectRatio(contentMode: ContentMode.fill)
+          .frame(height: 170)
+          .cornerRadius(10)
+          .shadow(radius: 10)
 
-      VStack(alignment: .leading, spacing: 5.0) {
-        Text(name)
-          .foregroundColor(.primary)
-          .font(.headline)
+        VStack(alignment: .leading) {
+          Spacer()
+          HStack {
+            Text(name)
+              .foregroundColor(.white)
+              .font(.headline)
+              .fontWeight(.bold)
+              .padding(10)
+            Spacer()
+          }.backgroundGradient()
+        }.frame(height: 170)
       }
     }
   }

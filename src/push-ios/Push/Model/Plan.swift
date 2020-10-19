@@ -21,6 +21,7 @@ struct Plan: Codable, Identifiable {
   var accessLevel: AccessLevel
   var planLevel: PlanLevel
   var schedule: Schedule
+  var categories: [Category]
 }
 
 struct Schedule: Codable {
@@ -64,4 +65,5 @@ let testPlan = Plan(
   thumbnailUrl: "",
   accessLevel: .free,
   planLevel: .beginner,
-  schedule: testSchedule)
+  schedule: testSchedule,
+  categories: [])

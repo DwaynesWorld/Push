@@ -29,4 +29,15 @@ extension View {
 
     return self.overlay(gradient).mask(self)
   }
+
+  public func backgroundGradient() -> some View {
+    let black = Color(Color.RGBColorSpace.sRGB, red: 0, green: 0, blue: 0, opacity: 0.75)
+    let gradient = LinearGradient(
+      gradient: .init(colors: [.clear, black]),
+      startPoint: .top,
+      endPoint: .bottom
+    )
+
+    return self.background(gradient)
+  }
 }

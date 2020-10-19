@@ -19,9 +19,20 @@ struct Exercise: Codable, Identifiable {
   var thumbnailUrl: String
   var count: Int
   var units: ExerciseUnit
+  var muscles: [MuscleGroup]
 }
 
 enum ExerciseUnit: Int, Codable {
   case reps
   case distance
+}
+
+enum MuscleGroup: String, Codable {
+  case arms
+  case chest
+  case thighs
+  case calves
+  case shoulders
+  case back
+  case abs
 }
