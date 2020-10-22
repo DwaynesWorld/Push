@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct PlanDetailsView: View {
-  let plan: Plan
+struct ProgramDetailsView: View {
+  let plan: Program
 
   var body: some View {
     Text("Plan Details!")
@@ -18,6 +18,6 @@ struct PlanDetailsView: View {
 
 struct PlanDetailsView_Previews: PreviewProvider {
   static var previews: some View {
-    PlanDetailsView(plan: testPlan)
+    ProgramDetailsView(plan: testProgram)
   }
 }

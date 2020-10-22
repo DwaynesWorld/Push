@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct MainView: View {
-  @State var selectedTab = 1
-  let plans: [Plan] = [testPlan, testPlan]
+  let programs: [Program] = [testProgram, testProgram]
 
   var body: some View {
     NavigationView {
@@ -18,7 +17,7 @@ struct MainView: View {
         Text("Hello, Kyle")
           .font(.body)
 
-        Text("Get Started by choosing a workout plan!")
+        Text("Get Started by choosing a workout program!")
           .font(.title)
           .bold()
           .padding(.top, 1)
@@ -32,9 +31,9 @@ struct MainView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
               HStack(alignment: .top) {
-                ForEach(plans, id: \.id) { plan in
-                  NavigationLink(destination: PlanDetailsView(plan: plan)) {
-                    PlanCardView(plan: plan)
+                ForEach(programs, id: \.id) { p in
+                  NavigationLink(destination: ProgramDetailsView(program: p)) {
+                    ProgramCardView(program: p)
                       .frame(width: 300.0)
                       .padding(.trailing, 20)
                   }
@@ -51,9 +50,9 @@ struct MainView: View {
               .foregroundColor(Color.primary)
 
             VStack {
-              ForEach(Category.allCases, id: \.self) { cat in
-                NavigationLink(destination: PlanDetailsView(plan: testPlan)) {
-                  CategoryCardView(name: cat.displayName)
+              ForEach(Category.allCases, id: \.self) { c in
+                NavigationLink(destination: CategoryDetailsView(category: c)) {
+                  CategoryCardView(name: c.displayName)
                     .padding(.bottom, 10)
                 }
               }

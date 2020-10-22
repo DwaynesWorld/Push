@@ -9,10 +9,10 @@
 import SwiftUI
 
 struct RootView: View {
-  @ObservedObject var m = RootViewModel()
+  @ObservedObject var vm = RootViewModel()
 
   var body: some View {
-    switch (m.isLoggedIn, m.userInitialized, m.onboardingComplete) {
+    switch (vm.isLoggedIn, vm.userInitialized, vm.onboardingComplete) {
     case (false, _, _): LoginView()
     case (true, true, true): MainView()
     case (true, true, false): TourView()
