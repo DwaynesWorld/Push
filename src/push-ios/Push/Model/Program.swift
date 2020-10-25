@@ -33,6 +33,7 @@ struct Workout: Codable {
 }
 
 struct Phase: Codable {
+  var id: String
   var name: String
   var description: String
   var rounds: Int
@@ -50,7 +51,13 @@ enum ProgramLevel: Int, Codable {
   case advanced
 }
 
-let testPhase = Phase(name: "Warm-up", description: "", rounds: 1, exercises: [])
+let testPhase = Phase(
+  id: UUID().uuidString,
+  name: "Warm-up",
+  description: "",
+  rounds: 1,
+  exercises: [])
+
 let testWorkout = Workout(phases: [testPhase])
 let testSchedule = Schedule(weeks: [[testWorkout]])
 

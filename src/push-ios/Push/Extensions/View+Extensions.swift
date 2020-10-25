@@ -20,11 +20,15 @@ extension View {
 
 @available(iOS 13.0, OSX 10.15, tvOS 13.0, watchOS 6.0, *)
 extension View {
-  public func foregroundGradient(_ colors: [Color]) -> some View {
+  public func foregroundGradient(
+    _ colors: [Color],
+    startPoint: UnitPoint = .topLeading,
+    endPoint: UnitPoint = .bottomTrailing
+  ) -> some View {
     let gradient = LinearGradient(
       gradient: .init(colors: colors),
-      startPoint: .topLeading,
-      endPoint: .bottomTrailing
+      startPoint: startPoint,
+      endPoint: endPoint
     )
 
     return self.overlay(gradient).mask(self)
